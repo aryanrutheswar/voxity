@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --vox-yellow: #FFE600;
+  --bg-main: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-border: #000000;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --accent-yellow: #FFE600;
+  --shadow-color: #000000;
+}
+
+.dark {
+  --vox-yellow: #FFE600;
+  --bg-main: #0B0F19;
+  --bg-card: #0F172A;
+  --bg-card-border: #334155;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --accent-yellow: #FFE600;
+  --shadow-color: #FFE600;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+/* Vox Electric Yellow Top Header Bar */
+.vox-header {
+  background-color: #FFE600;
+  color: #000000;
+  border-bottom: 2px solid #000000;
+}
+
+.dark .vox-header {
+  background-color: #0F172A;
+  color: #FFFFFF;
+  border-bottom: 2px solid #1E293B;
+}
+
+.glass-nav {
+  background-color: #FFE600;
+  color: #000000;
+  border-bottom: 2px solid #000000;
+}
+
+.dark .glass-nav {
+  background-color: #0F172A;
+  color: #FFFFFF;
+  border-bottom: 2px solid #1E293B;
+}
+
+/* Vox Editorial White Cards & Dark Neo-Brutalist Cards */
+.glass-card {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 2px solid var(--bg-card-border);
+  box-shadow: 4px 4px 0px var(--shadow-color);
+  transition: all 0.2s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 6px 6px 0px var(--shadow-color);
+}
+
+.dark .glass-card,
+.dark-glass-card {
+  background: #0F172A;
+  color: #F8FAFC;
+  border: 2px solid #334155;
+  box-shadow: 4px 4px 0px #FFE600;
+  transition: all 0.2s ease;
+}
+
+.dark .glass-card:hover,
+.dark-glass-card:hover {
+  border-color: #FFE600;
+  box-shadow: 6px 6px 0px #FFE600;
+}
+
+/* High-Contrast Highlight Text */
+.gradient-text {
+  background: #FFE600;
+  color: #000000;
+  padding: 0 6px;
+  border-radius: 4px;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: initial;
+  display: inline;
+  font-weight: 900;
+}
+
+/* Primary Vox Buttons (Yellow or Black) */
+.btn-gradient {
+  background: #FFE600;
+  color: #000000;
+  font-weight: 800;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  transition: all 0.15s ease;
+}
+
+.dark .btn-gradient {
+  background: #FFE600;
+  color: #000000;
+  border: 2px solid #FFE600;
+  box-shadow: 3px 3px 0px #FFFFFF;
+}
+
+.btn-gradient:hover {
+  background: #FAFF00;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+
+.dark .btn-gradient:hover {
+  box-shadow: 5px 5px 0px #FFFFFF;
+}
+
+.btn-gradient:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+/* Custom Vox Number Badges */
+.vox-badge {
+  background: #FFE600;
+  color: #000000;
+  font-weight: 900;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.dark .vox-badge {
+  background: #FFE600;
+  color: #000000;
+  border-color: #FFE600;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFE600;
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #FFE600;
+  border: 1px solid #FFE600;
+}
+
+/* Vox Electric Yellow Range Sliders */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #E2E8F0;
+  border-radius: 8px;
+  height: 8px;
+  touch-action: none;
+}
+
+.dark input[type=range] {
+  background: #334155;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FFE600;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.dark input[type=range]::-webkit-slider-thumb {
+  border: 2px solid #FFFFFF;
+  box-shadow: 2px 2px 0px #FFE600;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Fix mobile horizontal overflow & table touch scroll */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
