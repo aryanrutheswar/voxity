@@ -130,11 +130,11 @@ export function Blog() {
               <div className="p-6 pt-0 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 mt-4">
                 <div className="flex items-center gap-2">
                   <img
-                    src={post.author.avatar}
-                    alt={post.author.name}
+                    src={post.author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200'}
+                    alt={post.author?.name || 'Author'}
                     className="w-6 h-6 rounded-full object-cover border border-black dark:border-slate-700"
                   />
-                  <span className="text-xs font-extrabold text-black dark:text-slate-200">{post.author.name}</span>
+                  <span className="text-xs font-extrabold text-black dark:text-slate-200">{post.author?.name || 'Super Admin'}</span>
                 </div>
 
                 <span className="text-xs font-black text-black dark:text-[#FFE600] uppercase flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
@@ -172,10 +172,10 @@ export function Blog() {
 
                 <div className="flex items-center gap-4 text-xs font-extrabold text-black dark:text-slate-300 mb-6 pb-6 border-b-2 border-black dark:border-slate-800">
                   <div className="flex items-center gap-2">
-                    <img src={activeArticle.author.avatar} alt={activeArticle.author.name} className="w-8 h-8 rounded-full object-cover border border-black dark:border-slate-700" />
+                    <img src={activeArticle.author?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200'} alt={activeArticle.author?.name || 'Author'} className="w-8 h-8 rounded-full object-cover border border-black dark:border-slate-700" />
                     <div>
-                      <span className="font-black text-black dark:text-white block">{activeArticle.author.name}</span>
-                      <span className="text-[10px] text-slate-700 dark:text-slate-400">{activeArticle.author.role}</span>
+                      <span className="font-black text-black dark:text-white block">{activeArticle.author?.name || 'Super Admin'}</span>
+                      <span className="text-[10px] text-slate-700 dark:text-slate-400">{activeArticle.author?.role || 'Senior Growth Director'}</span>
                     </div>
                   </div>
                   <span>•</span>
@@ -193,7 +193,7 @@ export function Blog() {
 
                 <div className="mt-8 pt-6 border-t-2 border-black dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-2 flex-wrap">
-                    {activeArticle.tags.map((tag) => (
+                    {activeArticle.tags?.map((tag) => (
                       <span key={tag} className="px-2.5 py-1 rounded-md bg-[#FFE600]/20 dark:bg-[#FFE600]/10 border border-black dark:border-[#FFE600] text-black dark:text-white text-[11px] font-black uppercase">
                         #{tag}
                       </span>

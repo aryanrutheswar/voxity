@@ -78,16 +78,23 @@ export interface PricingPlan {
   popular?: boolean;
 }
 
+export interface BlogAuthor {
+  name: string;
+  role?: string;
+  avatar?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
   category: string;
   readTime: string;
-  date: string;
+  date?: string;
+  publishedAt?: string;
   image: string;
   content?: string;
-  author?: string;
+  author: BlogAuthor;
   tags?: string[];
 }
 
