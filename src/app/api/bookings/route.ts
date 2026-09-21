@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { name, email, phone, slot, notes, audioNote } = body;
 
     // Automatically create a Pending Work task for every strategy call booking
-    const newWorkTask = db.addWorkTask({
+    const newWorkTask = await db.addWorkTask({
       title: `📞 Strategy Call: ${name || 'Client'}`,
       clientName: `${name || 'Client'} (${email || 'No email'}${phone ? ' | ' + phone : ''})`,
       serviceCategory: 'Strategy Audit',
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       priority: 'High',
     });
 
-    db.addBooking({
+    await db.addBooking({
       name: name || 'Client',
       email: email || '',
       phone,
