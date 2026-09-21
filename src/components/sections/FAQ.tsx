@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 
 export function FAQ() {
-  const [openId, setOpenId] = useState<string | null>(FAQ_ITEMS[0].id);
+  const [openId, setOpenId] = useState<string | null>(FAQ_ITEMS[0]?.id || null);
 
   const toggle = (id: string) => {
     setOpenId(openId === id ? null : id);

@@ -9,6 +9,7 @@ export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    if (!TESTIMONIALS || TESTIMONIALS.length === 0) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
     }, 6000);
@@ -16,14 +17,18 @@ export function Testimonials() {
   }, []);
 
   const handleNext = () => {
+    if (!TESTIMONIALS || TESTIMONIALS.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
   };
 
   const handlePrev = () => {
+    if (!TESTIMONIALS || TESTIMONIALS.length === 0) return;
     setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
   };
 
-  const current = TESTIMONIALS[currentIndex];
+  const current = TESTIMONIALS && TESTIMONIALS.length > 0 ? TESTIMONIALS[currentIndex] : null;
+
+  if (!current) return null;
 
   return (
     <section id="testimonials" className="py-24 sm:py-32 relative overflow-hidden bg-white dark:bg-[#0B0F19] text-black dark:text-white border-t-2 border-black dark:border-slate-800 transition-colors duration-300">

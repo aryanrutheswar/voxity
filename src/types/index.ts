@@ -41,17 +41,33 @@ export interface PortfolioItem {
   }[];
 }
 
+export interface CaseStudyQuote {
+  text: string;
+  author: string;
+  role: string;
+  company: string;
+}
+
+export interface CaseStudyResult {
+  metric: string;
+  growth: string;
+}
+
 export interface CaseStudy {
   id: string;
   clientName: string;
   industry: string;
   challenge: string;
-  solution: string;
-  metrics: {
+  solution?: string;
+  summary?: string;
+  duration?: string;
+  results?: CaseStudyResult[];
+  strategy?: string[];
+  metrics?: {
     label: string;
     value: string;
   }[];
-  quote?: string;
+  quote?: CaseStudyQuote;
 }
 
 export interface Testimonial {

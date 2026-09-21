@@ -23,7 +23,7 @@ export function CaseStudies() {
       .catch((err) => console.error('Failed to fetch CMS case studies', err));
   }, []);
 
-  const activeStudy = studiesList[activeTab] || studiesList[0] || CASE_STUDIES[0];
+  const activeStudy = studiesList && studiesList.length > 0 ? (studiesList[activeTab] || studiesList[0]) : null;
 
   return (
     <section id="case-studies" className="py-24 sm:py-32 relative overflow-hidden bg-white dark:bg-[#0B0F19] text-black dark:text-white border-t-2 border-black dark:border-slate-800 transition-colors duration-300">
@@ -78,9 +78,11 @@ export function CaseStudies() {
                   <h3 className="font-heading text-3xl sm:text-4xl font-black text-black dark:text-white mb-2">
                     {activeStudy.clientName}
                   </h3>
-                  <p className="text-xs text-black dark:text-slate-300 font-extrabold font-mono">
-                    Duration: {activeStudy.duration}
-                  </p>
+                  {activeStudy.duration && (
+                    <p className="text-xs text-black dark:text-slate-300 font-extrabold font-mono">
+                      Duration: {activeStudy.duration}
+                    </p>
+                  )}
                 </div>
 
                 {/* Verified Metric Numbers Grid */}
@@ -113,9 +115,11 @@ export function CaseStudies() {
                   <h4 className="text-xs font-black uppercase tracking-wider text-black dark:text-[#FFE600] mb-2">
                     Execution Strategy
                   </h4>
-                  <p className="text-sm sm:text-base text-black dark:text-slate-300 font-bold leading-relaxed mb-4">
-                    {activeStudy.summary}
-                  </p>
+                  {activeStudy.summary && (
+                    <p className="text-sm sm:text-base text-black dark:text-slate-300 font-bold leading-relaxed mb-4">
+                      {activeStudy.summary}
+                    </p>
+                  )}
                   <div className="space-y-2">
                     {activeStudy.strategy && activeStudy.strategy.map((pillar) => (
                       <div key={pillar} className="flex items-center gap-2 text-xs sm:text-sm text-black dark:text-slate-200 font-extrabold">

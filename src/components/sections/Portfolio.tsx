@@ -83,7 +83,7 @@ export function Portfolio({ onSelectProject }: PortfolioProps) {
 
                     {/* Metrics Highlights Overlay */}
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-around p-2.5 rounded-lg bg-black text-[#FFE600] border border-black">
-                      {item.metrics.map((m) => (
+                      {item.metrics?.map((m) => (
                         <div key={m.label} className="text-center px-1">
                           <span className="block text-xs sm:text-sm font-black text-[#FFE600]">{m.value}</span>
                           <span className="block text-[9px] text-white font-extrabold uppercase tracking-tight truncate">
@@ -108,7 +108,7 @@ export function Portfolio({ onSelectProject }: PortfolioProps) {
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                      {item.tags.map((t) => (
+                      {item.tags?.map((t) => (
                         <span
                           key={t}
                           className="px-2.5 py-1 rounded-md bg-[#FFE600]/20 dark:bg-[#FFE600]/10 border border-black dark:border-[#FFE600] text-black dark:text-white text-[10px] font-black uppercase"
