@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 
-const ADMIN_EMAIL = 'aryanrutheswar1823@gmail.com';
-const ADMIN_PASSWORD = 'voxityaryan';
+const ADMIN_EMAILS = [
+  'aryanrutheswar1823@gmail.com',
+  'aryanrutheswar@1823@gmail.com'
+];
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'voxity@123';
 
 export async function POST(request: Request) {
   try {
@@ -17,14 +20,15 @@ export async function POST(request: Request) {
     const cleanEmail = email.trim().toLowerCase();
 
     // Admin Authentication Check
-    if (cleanEmail === ADMIN_EMAIL.toLowerCase()) {
+    const isAdmin = ADMIN_EMAILS.some(adminEmail => adminEmail.toLowerCase() === cleanEmail);
+    if (isAdmin) {
       if (password === ADMIN_PASSWORD) {
         return NextResponse.json({
           success: true,
           token: 'admin-session-token-voxity-2026',
           redirectUrl: '/admin',
           user: {
-            email: ADMIN_EMAIL,
+            email: cleanEmail,
             name: 'Aryan Rutheswar (Admin)',
             role: 'ADMIN'
           }

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ShieldCheck, Lock, Mail, Key, Sparkles, LogOut, RefreshCw, Download, Trash2, CheckCircle2, AlertCircle, ArrowLeft, Users, Calendar, Inbox, DollarSign, Plus, Edit3, X, BookOpen, Layers, Mic, Volume2, FileText, CheckSquare, Upload, ExternalLink, Eye, Clock, FileCheck, AlertTriangle, Share2, Copy, Send
+  ShieldCheck, Lock, Mail, Key, Sparkles, LogOut, RefreshCw, Download, Trash2, CheckCircle2, AlertCircle, ArrowLeft, Users, Calendar, Inbox, DollarSign, Plus, Edit3, X, BookOpen, Layers, Mic, Volume2, FileText, CheckSquare, Upload, ExternalLink, Eye, EyeOff, Clock, FileCheck, AlertTriangle, Share2, Copy, Send
 } from 'lucide-react';
 import { LeadInquiry, Booking, Subscriber, WorkTask } from '@/lib/db';
 import { Service, BlogPost } from '@/types';
@@ -13,10 +13,13 @@ import { VoxLogo } from '@/components/widgets/VoxLogo';
 import { ThemeToggle } from '@/components/widgets/ThemeToggle';
 
 export default function AdminPortal() {
-  const { user, loginWithGoogle, logout: authLogout } = useAuth();
+  const { user, login, loginWithGoogle, logout: authLogout } = useAuth();
   const [email, setEmail] = useState('aryanrutheswar1823@gmail.com');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [step, setStep] = useState<'REQUEST_OTP' | 'VERIFY_OTP' | 'DASHBOARD'>('REQUEST_OTP');
+  const [loginMethod, setLoginMethod] = useState<'PASSWORD' | 'OTP'>('PASSWORD');
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -298,6 +301,43 @@ export default function AdminPortal() {
     }
   };
 
+  const handlePasswordAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg('');
+    setSuccessMsg('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setErrorMsg(data.error || 'Invalid credentials');
+        setLoading(false);
+        return;
+      }
+
+      if (data.user?.role !== 'ADMIN') {
+        setErrorMsg('Access Denied: You do not have Super Admin privileges.');
+        setLoading(false);
+        return;
+      }
+
+      login(data.user, data.token);
+      setSuccessMsg(`Welcome, ${data.user.name}!`);
+      setStep('DASHBOARD');
+      fetchDashboardData();
+    } catch (err) {
+      setErrorMsg('Network error authenticating admin.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Request 6-digit OTP code
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -349,6 +389,9 @@ export default function AdminPortal() {
         return;
       }
 
+      if (data.user) {
+        login(data.user, data.token || 'admin-session-token');
+      }
       setStep('DASHBOARD');
       fetchDashboardData();
     } catch (err) {
@@ -760,7 +803,7 @@ export default function AdminPortal() {
               </motion.div>
             )}
 
-            {/* Request OTP Screen */}
+            {/* Admin Login Screen */}
             {step === 'REQUEST_OTP' && (
               <div className="glass-card p-8 rounded-3xl space-y-6 border border-slate-800">
                 <button
@@ -781,36 +824,114 @@ export default function AdminPortal() {
                 <div className="relative flex items-center justify-center">
                   <div className="border-t border-slate-800 w-full" />
                   <span className="bg-slate-900 px-3 text-[11px] font-bold text-slate-500 uppercase absolute">
-                    Or Admin Email Verification
+                    Or Admin Credentials
                   </span>
                 </div>
 
-                <form onSubmit={handleRequestOtp} className="space-y-6">
-                  <div>
-                    <label className="block text-xs font-bold uppercase text-slate-400 mb-2">
-                      Admin Email Address *
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="aryanrutheswar1823@gmail.com"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      />
-                    </div>
-                  </div>
-
+                <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800">
                   <button
-                    type="submit"
-                    disabled={loading || googleLoading}
-                    className="w-full btn-gradient py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                    type="button"
+                    onClick={() => setLoginMethod('PASSWORD')}
+                    className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      loginMethod === 'PASSWORD'
+                        ? 'bg-[#FFE600] text-black shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
                   >
-                    {loading ? 'Generating Code...' : 'Send Single-Use Verification Code'}
+                    Password Login
                   </button>
-                </form>
+                  <button
+                    type="button"
+                    onClick={() => setLoginMethod('OTP')}
+                    className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      loginMethod === 'OTP'
+                        ? 'bg-[#FFE600] text-black shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Email OTP
+                  </button>
+                </div>
+
+                {loginMethod === 'PASSWORD' ? (
+                  <form onSubmit={handlePasswordAdminLogin} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-slate-400 mb-2">
+                        Admin Email Address *
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="aryanrutheswar1823@gmail.com"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-slate-400 mb-2">
+                        Admin Password *
+                      </label>
+                      <div className="relative">
+                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="••••••••"
+                          className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading || googleLoading}
+                      className="w-full btn-gradient py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                    >
+                      {loading ? 'Authenticating Admin...' : 'Sign In as Super Admin'}
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleRequestOtp} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase text-slate-400 mb-2">
+                        Admin Email Address *
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="aryanrutheswar1823@gmail.com"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading || googleLoading}
+                      className="w-full btn-gradient py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                    >
+                      {loading ? 'Generating Code...' : 'Send Single-Use Verification Code'}
+                    </button>
+                  </form>
+                )}
               </div>
             )}
 

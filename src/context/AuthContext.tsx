@@ -9,7 +9,10 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 
-const ADMIN_EMAIL = 'aryanrutheswar1823@gmail.com';
+const ADMIN_EMAILS = [
+  'aryanrutheswar1823@gmail.com',
+  'aryanrutheswar@1823@gmail.com'
+];
 
 export interface AuthUser {
   email: string;
@@ -37,7 +40,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser: FirebaseUser | null) => {
       if (fbUser && fbUser.email) {
         const userEmail = fbUser.email.toLowerCase();
-        const isAdmin = userEmail === ADMIN_EMAIL.toLowerCase();
+        const isAdmin = ADMIN_EMAILS.some(ae => ae.toLowerCase() === userEmail);
         const role: 'ADMIN' | 'USER' = isAdmin ? 'ADMIN' : 'USER';
 
         const authUser: AuthUser = {
@@ -87,7 +90,7 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
       }
 
       const userEmail = fbUser.email.toLowerCase();
-      const isAdmin = userEmail === ADMIN_EMAIL.toLowerCase();
+      const isAdmin = ADMIN_EMAILS.some(ae => ae.toLowerCase() === userEmail);
       const role: 'ADMIN' | 'USER' = isAdmin ? 'ADMIN' : 'USER';
       const redirectUrl = isAdmin ? '/admin' : '/dashboard';
 
